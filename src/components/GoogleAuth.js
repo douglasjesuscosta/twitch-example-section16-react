@@ -8,28 +8,40 @@ const GoogleAuth = () => {
       window.gapi.client
         .init({
           clientId:
-            "KEY",
+            "110811983755-o9nplgfsksrhbif3krjn4mbmoqe3h6e2.apps.googleusercontent.com",
           scope: "email"
         })
         .then(() => {
           let auth = window.gapi.auth2.getAuthInstance();
           setSignedIn(auth.isSignedIn.get());
 
-          auth.isSignedIn.listen( () => {
-            setSignedIn(auth.isSignedIn.get())
-          })
+          auth.isSignedIn.listen(() => {
+            setSignedIn(auth.isSignedIn.get());
+          });
         });
     });
   });
 
   return (
     <div>
-      {isSignedIn === null ? (
+      { isSignedIn === null ? (
         <div>I don't know if we are signed in</div>
       ) : isSignedIn === true ? (
-        <div>I'm signed in</div>
+        <button
+          className="ui red google button"
+          onClick={() => {
+            window.gapi.auth2.getAuthInstance().signOut();
+          }}>
+          <i className="google icon" />
+          Sign out
+        </button>
       ) : (
-        <div>I'm not signed in</div>
+        <button className="ui red google button" onClick={() => {
+            window.gapi.auth2.getAuthInstance().signIn();
+        }}>
+          <i className="google icon" />
+          Sign in with Google
+        </button>
       )}
     </div>
   );
