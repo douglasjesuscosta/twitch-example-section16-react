@@ -18,6 +18,7 @@ const authentication = (state = initialState, action) => {
       };
 
     case "CHANGE_AUTH":
+      console.log("PASSEI REDUCER")
       return {
         ...state,
         loading: false,
