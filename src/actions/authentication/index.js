@@ -1,44 +1,59 @@
 
-export const sign_in_request = () => ({ type: "SIGN_IN_REQUEST" });
+import { SIGN_IN_REQUEST, SIGN_OUT_REQUEST, LOGIN_ERROR, CHANGE_AUTH } from './types'
 
-export const sign_out_request = () => ({ type: "SIGN_OUT_REQUEST" });
+export const sign_in_request = () => ({ type: SIGN_IN_REQUEST});
 
-export const login_error = () => ({ type: "LOGIN_ERROR" });
+export const sign_out_request = () => ({ type: SIGN_OUT_REQUEST });
 
-export const change_auth = response => ({
-  type: "CHANGE_AUTH",
-  data: response
+export const login_error = () => ({ type: LOGIN_ERROR });
+
+export const change_auth = (isAuthenticated, userId) => ({
+  type: CHANGE_AUTH,
+  data: {
+    isAuthenticated,
+    userId
+  }
 });
 
 export const verify_authentication = () => dispatch => {
-  console.log("PASSEI")
   window.gapi.load("client:auth2", () => {
     window.gapi.client
       .init({
         clientId:
-          "110811983755-o9nplgfsksrhbif3krjn4mbmoqe3h6e2.apps.googleusercontent.com",
+          "KEY",
         scope: "email"
       })
       .then(() => {
         let auth = window.gapi.auth2.getAuthInstance();
-        dispatch(change_auth(auth.isSignedIn.get()));
+        
+        let isAuthenticated = auth.isSignedIn.get();
+        let userId = isAuthenticated ? auth.currentUser.get().getId() : '';
+
+        dispatch(change_auth(isAuthenticated, userId));
 
         auth.isSignedIn.listen(() => {
-          dispatch(change_auth(auth.isSignedIn.get()));
+
+          isAuthenticated = auth.isSignedIn.get()
+          userId = isAuthenticated ? auth.currentUser.get().getId() : '';
+
+          dispatch(change_auth(isAuthenticated, userId));
         });
       });
   });
 };
 
 export const try_to_sign_in = () => dispatch => {
-  console.log("PASSEI AUTH")
   let auth = window.gapi.auth2.getAuthInstance();
   auth.signIn();
 
   dispatch(sign_in_request());
 
   auth.isSignedIn.listen(() => {
-    dispatch(change_auth(auth.isSignedIn.get()));
+
+    let isAuthenticated = auth.isSignedIn.get()
+    let userId = isAuthenticated ? auth.currentUser.get().getId() : '';
+
+    dispatch(change_auth(isAuthenticated, userId));
   });
 };
 
@@ -49,6 +64,10 @@ export const try_to_sign_out = () => dispatch => {
   dispatch(sign_out_request());
 
   auth.isSignedIn.listen(() => {
-    dispatch(change_auth(auth.isSignedIn.get()));
+
+    let isAuthenticated = auth.isSignedIn.get();
+    let userId = isAuthenticated ? auth.currentUser.get().getId() : '';
+
+    dispatch(change_auth(isAuthenticated, userId));
   });
 };
