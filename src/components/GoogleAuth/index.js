@@ -1,10 +1,16 @@
-import * as authentication_action from './../actions/authentication'
 
+//React
 import React, { useState, useEffect } from "react";
+
+//React Bootstrap
+import { Button } from 'react-bootstrap';
 
 //Redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+
+//Actions related to authentication
+import * as authentication_action from './../../actions/authentication'
 
 const GoogleAuth = ({is_authenticated, try_to_sign_in, try_to_sign_out, verify_authentication}) => {
   const [isSignedIn, setSignedIn] = useState(null);
@@ -15,25 +21,18 @@ const GoogleAuth = ({is_authenticated, try_to_sign_in, try_to_sign_out, verify_a
   }, [is_authenticated]);
 
   return (
-    <div>
+    <div className="justify-content-end">
       { isSignedIn === null ? (
-        <div>I don't know if we are signed in</div>
-      ) : isSignedIn === true ? (
-        <button
-          className="ui red google button"
-          onClick={() => {
-           try_to_sign_out()
-          }}>
-          <i className="google icon" />
+        <div> I don't know if we are signed in</div>
+      ) 
+      : isSignedIn === true ? (
+        <Button variant="danger" size="sm" onClick={ () => { try_to_sign_out() }}>
           Sign out
-        </button>
+        </Button>
       ) : (
-        <button className="ui red google button" onClick={() => {
-          try_to_sign_in()
-        }}>
-          <i className="google icon" />
+        <Button variant="light" size="sm" onClick={ () => { try_to_sign_in() }}>
           Sign in with Google
-        </button>
+        </Button>
       )}
     </div>
   );

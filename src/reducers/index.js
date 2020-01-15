@@ -1,5 +1,7 @@
 import { combineReducers } from "redux";
-import { reducer as formReducer} from 'redux-form';
 import authentication from "./authentication";
+import stream from "./stream";
+import data from "./data";
+import locations from './locations';
 
-export default combineReducers({ authentication: authentication, form: formReducer });
+export default combineReducers({ authentication: authentication, stream: stream, data: data, locations: locations });
