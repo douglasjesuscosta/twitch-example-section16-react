@@ -1,14 +1,16 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { BrowserRouter, Route } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import StreamEdit from './streams/StreamEdit';
 import StreamList from './streams/StreamList';
 import StreamShow from './streams/StreamShow';
 import StreamDelete from './streams/StreamDelete';
 import StreamCreate from './streams/StreamCreate/';
 import HeaderApplication from './HeaderApplication';
+
+import Message from './layout/message/';
 
 import './App.css'
 
@@ -20,6 +22,11 @@ const App = () => {
                 <Row>
                     <Col>
                         <HeaderApplication />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Message/>
                     </Col>
                 </Row>
                 <Row>

@@ -5,13 +5,18 @@ import {
   FETCH_STREAMS,
   FETCH_STREAM,
   EDIT_STREAM,
-  DELETE_STREAM
+  DELETE_STREAM,
+  REMOVE_STREAM_REQUEST
 } from './types';
 
 import stream from '../../apis/stream';
 
 export const add_stream_request = () => ({
   type: ADD_STREAM_REQUEST
+})
+
+export const remove_stream_request = () => ({
+  type: REMOVE_STREAM_REQUEST
 })
 
 export const set_temp_stream = (stream) => ({
@@ -21,29 +26,38 @@ export const set_temp_stream = (stream) => ({
   }
 });
 
-export const add_stream = formValues => async dispatch => {
+export const add_stream = streamValue => async dispatch => {
   dispatch(add_stream_request())
 
-  let streammerPost = {
-    name: formValues.name,
-    description: formValues.description,
-    idCountry: formValues.country
-  }
-  const response = await stream.post('', streammerPost)
+  const response = await stream.post('', streamValue)
   dispatch({ type: ADD_STREAM, payload: response.data })
 };
+
+export const delete_stream = (id, onDeleteSuccess, onDeleteError) => async dispatch => {
+
+  dispatch(add_stream_request());
+
+  await stream.delete(`${id}`).then(
+    (response) => {
+      onDeleteSuccess();
+      dispatch({ type: DELETE_STREAM, payload: id });
+      dispatch(remove_stream_request());
+    },
+    (error)=> {
+      onDeleteError();
+      dispatch(remove_stream_request());
+    })
+}
 
 export const fetch_streams = () => async dispatch => {
   dispatch(add_stream_request());
 
   await stream.get().then((response) => {
-
     dispatch({ type: FETCH_STREAMS, payload: response.data })
   },
     (error) => {
       console.log(error);
     });
-
 }
 
 export const fetch_stream = (id) => async dispatch => {
@@ -56,11 +70,4 @@ export const edit_stream = (id, formValues) => async dispatch => {
   const response = await stream.put(`/streams/${id}`, formValues);
 
   dispatch({ type: EDIT_STREAM, payload: response.data });
-}
-
-export const delete_stream = (id) => async dispatch => {
-  await stream.delete(`/streams/${id}`);
-
-  dispatch({ type: DELETE_STREAM, payload: id });
-
 }

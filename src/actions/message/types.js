@@ -1,0 +1,2 @@
+export const SHOW_MESSAGE = 'SHOW_MESSAGE';
+export const CLOSE_MESSAGE = 'CLOSE_MESSAGE';

@@ -6,7 +6,8 @@ import {
   FETCH_STREAMS,
   FETCH_STREAM,
   DELETE_STREAM,
-  EDIT_STREAM
+  EDIT_STREAM,
+  REMOVE_STREAM_REQUEST
 } from '../../actions/stream/types'
 
 const initialState = {
@@ -22,11 +23,13 @@ const initialState = {
 const stream = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_STREAMS:
-      return {...state,
-              streams: action.payload,
-              loading: false };
+      return {
+        ...state,
+        streams: action.payload,
+        loading: false
+      };
     case FETCH_STREAM:
-      return {...state, [action.payload.id]: action.payload };
+      return { ...state, [action.payload.id]: action.payload };
     case SET_TEMP_STREAM:
       return {
         ...state,
@@ -40,13 +43,18 @@ const stream = (state = initialState, action) => {
         ...state,
         loading: true,
       };
+    case REMOVE_STREAM_REQUEST:
+      return {
+        ...state,
+        loading: false,
+      };
     case ADD_STREAM:
       return {
         ...state,
         name: '',
         language: '',
         country: '',
-        description:'',
+        description: '',
         streams: [...state.streams, action.data]
       };
     case DELETE_STREAM:
